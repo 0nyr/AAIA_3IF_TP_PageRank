@@ -1,0 +1,333 @@
+% !TeX spellcheck = fr-FR, en-US
+% !TeX encoding = UTF-8
+% !TEX program = pdflatex
+
+% VSCODE word wrap: ALT + Z
+% COMPILE WITH:
+% `latexmk`
+% latexmk -pdf main.tex
+% You need pdflatex and biber (in all TeXLive distributions)
+
+\documentclass[11pt]{article} % text width
+\usepackage[utf8]{inputenc} % encode text to utf8
+
+% Set the label for itemize globally, if desired
+\usepackage{enumitem}
+\setlist[itemize]{label=\textbullet}
+
+% paragraph formatting: https://www.overleaf.com/learn/latex/Paragraph_formatting
+\setlength{\parindent}{1em}
+\setlength{\parskip}{1em}
+
+% better language support
+\usepackage[english, french]{babel}
+
+% use pdflatex
+\usepackage[T1]{fontenc} % font encoding
+\usepackage[a4paper, margin=2cm, head=18.0pt]{geometry} % set margins to 1.5 cm
+\usepackage{graphicx}% for graphics
+\usepackage[onehalfspacing]{setspace}
+\usepackage{tocbasic}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage[]{scrlayer-scrpage}
+\usepackage[titletoc]{appendix}
+\usepackage{comment}
+
+\usepackage{dirtree} % directory tree
+\usepackage{float} % float images
+\usepackage{microtype} % better text formatting, avoid one word on a new line for example
+\usepackage{mathtools} % math tools
+\usepackage{amssymb} % math symbols
+\usepackage{algorithm} % algorithm
+% \usepackage{algorithmic}  % old, use algorithmicx from algpseudocode
+\usepackage{algpseudocode} % pseudocode
+
+% fix Font shape `T1/fve/m/sc' undefined on \Procedure
+\renewcommand{\algorithmicprocedure}{\textbf{Procedure}}
+
+\usepackage{tikz} % for drawing graphs
+\usetikzlibrary{arrows.meta} % for arrow styles
+%\usetikzlibrary{positioning} % for relative positioning of nodes
+
+% quotes and bibliography: https://www.overleaf.com/learn/latex/Typesetting_quotations
+\usepackage{csquotes}
+\usepackage[
+    % Use the french style of quotes, which are more visibly distinct
+    left = \flqq{},% 
+    right = \frqq{},% 
+    leftsub = \flq{},% 
+    rightsub = \frq{} %
+]{dirtytalk}
+\DeclareQuoteStyle{english}{\glqq}{\grqq}{\glq}{\grq}
+
+% \usepackage[
+%     backend=biber,
+%     style=numeric,
+%     sorting=none
+% ]{biblatex}
+%\usepackage[backend=biber, style=numeric, defernumbers=true, language=american]{biblatex}
+\usepackage[backend=biber, style=numeric, sorting=none, defernumbers=true, language=american]{biblatex}
+% add commands for automatic cite/uncite distinction
+\DeclareBibliographyCategory{cited}
+\AtEveryCitekey{\addtocategory{cited}{\thefield{entrykey}}}
+\addbibresource{biblio.bib} % bibliography
+\nocite{*} % all references
+
+\newcommand{\ts}{\textsuperscript} % superscript for 2nd or XIXème
+
+\pagenumbering{roman} % set page numbering of front matter sections
+
+% use acronyms and glossaries
+% toc: add glossary to table of contents
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage[acronym, toc]{glossaries} 
+\makeglossaries
+\newglossaryentry{memgraph}
+{
+  name=memory graph,
+  description={A memory graph, or \textit{memgraph} is a graph representation of a memory dump. This graph can be a graph of blocks, where each node in the graph corresponds to a block of 8 bytes in the heap dump and each edge corresponds to a pointer from one block to another, or describes which blocks are part of a chunk whose root note is a Chunk Header Node. It can also be a graph of chunks (only CHNs), where each node in the graph corresponds to a chunk in heap dump and each edge corresponds to a pointer from one object to another.}
+}
+
+\newglossaryentry{nodes}
+{
+  name=nodes,
+  description={A node is an entity in a graph, it can be a person, a place, a thing, or any other entity.}
+}
+\newglossaryentry{chn}{
+  name={CHN},
+  description={Chunk Header Node. This is a node whose bytes have been identified as a data structure header. In the graph, this node is the root node of an malloc-allocated memory chunk.}
+}
+
+\newglossaryentry{pn}{
+  name={PN},
+  description={Pointer Node. This is a node whose bytes have been identified as a pointer.}
+}
+
+\newglossaryentry{kn}{
+  name={KN},
+  description={Key Node. This is a node whose bytes have been identified as a key. This identification relies both on the annotations and some verification checks.}
+}
+
+\newglossaryentry{vn}{
+  name={VN},
+  description={Value Node. These are all blocks that have not been identified. It is the default node type.}
+}
+
+\newacronym{kg}{KG}{Knowledge Graph}
+\newacronym{foss}{FOSS}{Free and Open Source Software}
+\newacronym{rdf}{RDF}{Resource Description Framework}
+\newacronym{rdfs}{RDFS}{Resource Description Framework Schema}
+\newacronym{owl}{OWL}{Web Ontology Language}
+\newacronym{ml}{ML}{Machine Learning}
+\newacronym{dl}{DL}{Deep Learning}
+\newacronym{fe}{FE}{Feature Evaluation}
+\newacronym{nlp}{NLP}{Natural Language Processing}
+\newacronym{ke}{KE}{Knowledge Engineering}
+\newacronym{del}{DEL}{Directed Edge-labelled Graphs}
+\newacronym{er}{ER}{Entity Resolution}
+\newacronym{qa}{QA}{Quality Assurance}
+\newacronym{sparql}{SPARQL}{SPARQL Protocol and RDF Query Language}
+\newacronym{ssh}{SSH}{Secure Shell Protocol}
+\newacronym{os}{OS}{Operating System}
+\newacronym{vm}{VM}{Virtual Machine}
+\newacronym{ddos}{DDoS}{Distributed Denial of Service}
+\newacronym{ess}{ESS}{Estimated Security Strength}
+\newacronym{vmi}{VMI}{Virtual Machine Introspection}
+\newacronym{smote}{SMOTE}{Synthetic Minority Over-sampling Technique}
+\newacronym{svm}{SVM}{Support Vector Machine}
+\newacronym{knn}{KNN}{K-Nearest Neighbors}
+\newacronym{rf}{RF}{Random Forest}
+\newacronym{mlp}{MLP}{Multi-Layer Perceptron}
+\newacronym{relu}{ReLU}{Rectified Linear Unit}
+\newacronym{sgd}{SGD}{Stochastic Gradient Descent}
+\newacronym{ai}{AI}{Artificial Intelligence}
+\newacronym{pca}{PCA}{Principal Component Analysis}
+\newacronym{lda}{LDA}{Linear Discriminant Analysis}
+\newacronym{tsne}{t-SNE}{t-distributed Stochastic Neighbor Embedding}
+\newacronym{msb}{MSB}{Most Significant Bit}
+\newacronym{lsb}{LSB}{Least Significant Bit}
+
+%deep learning
+\newacronym{lstm}{LSTM}{Long Short-Term Memory}
+\newacronym{gru}{GRU}{Gated Recurrent Units}
+\newacronym{rnn}{RNN}{Recurrent Neural Networks}
+\newacronym{cnn}{CNN}{Convolutional Neural Networks}
+\newacronym{rcnn}{RCNN}{Recurrent Convolutional Neural Network}
+\newacronym{gnn}{GNN}{Graph Neural Network}
+\newacronym{gcn}{GCN}{Graph Convolutional Networks}
+\newacronym{llm}{LLM}{Large Language Model}
+
+% INSA
+\newacronym{insa}{INSA}{Institut National des Sciences Appliquées}
+\newacronym{aaia}{AAIA}{Algorithmique Avancée pour l'Intelligence Artificielle et les graphes}
+
+%\input{glossaries.tex} % acronyms definitions, failed to make in work on a separate file!!!
+
+% custom commands
+% escape char in latex: https://tex.stackexchange.com/questions/34580/escape-character-in-latex
+% horizontal spacing: https://tex.stackexchange.com/questions/74353/what-commands-are-there-for-horizontal-spacing/74354
+\newcommand{\p}{\texttt{+}} % small unary plus
+\newcommand{\doublep}{\texttt{++}} % double small unary plus
+\newcommand{\m}{\texttt{-} \space} % small unary minus
+\newcommand{\doublem}{\texttt{-}\texttt{-} \space} % double small unary minus
+
+% title and section formatting
+\usepackage{titlesec}
+
+\setcounter{tocdepth}{3} % set depth of table of contents
+\setcounter{secnumdepth}{3}  % Numbering depth of sections
+
+% ------------------------------ code ------------------------------
+\usepackage{listings} % code listings
+
+% code listing style
+\usepackage{bera}% optional: just to have a nice mono-spaced font
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{eclipseStrings}{RGB}{42,0.0,255}
+\definecolor{eclipseKeywords}{RGB}{127,0,85}
+\definecolor{punctuationcolor}{rgb}{0.5,0,0}
+\definecolor{delimcolor}{rgb}{0,0.5,0}
+\definecolor{red}{rgb}{1,0,0}
+\colorlet{numb}{magenta!60!black}
+
+\lstset{
+  language=bash,
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  showstringspaces=false,
+  tabsize=4,
+  captionpos=b
+}
+
+\lstdefinestyle{json}{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  postbreak=\mbox{\space},
+  columns=fullflexible,
+  showstringspaces=false,
+  commentstyle=\color{gray},
+  keywordstyle=\color{black},
+  numberstyle=\tiny\color{gray},
+  numbers=left,
+  frame=single,
+  captionpos=b
+}
+
+\lstdefinestyle{text}{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  postbreak=\mbox{\space},
+  columns=fullflexible,
+  showstringspaces=false,
+  commentstyle=\color{gray},
+  keywordstyle=\color{black},
+  numberstyle=\tiny\color{gray},
+  numbers=left,
+  frame=single,
+  captionpos=b
+}
+
+\lstdefinestyle{hexdump}{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  postbreak=\mbox{\space},
+  columns=fullflexible,
+  showstringspaces=false,
+  commentstyle=\color{gray},
+  keywordstyle=\color{black},
+  numberstyle=\tiny\color{gray},
+  numbers=left,
+  frame=single,
+  captionpos=b
+}
+
+\lstdefinestyle{rust}{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  postbreak=\mbox{\space},
+  columns=fullflexible,
+  showstringspaces=false,
+  commentstyle=\color{gray},
+  keywordstyle=\color{black},
+  numberstyle=\tiny\color{gray},
+  numbers=left,
+  frame=single,
+  captionpos=b
+}
+
+\usepackage{hyphenat} % fix "overfull hbox" with slicing words using hyphenation
+\hyphenation{hy-phen-a-tion} % indicate all 3 permissible hyphenation points
+
+% where to put all images and figures
+\graphicspath{{img/}}
+
+% customize the header and footer of the document
+\usepackage{scrlayer-scrpage}
+\clearpairofpagestyles
+\cfoot[\pagemark]{\pagemark}
+
+\input{tex/title.tex} % title information
+
+% document content
+\begin{document}
+
+% -- Title
+\maketitle
+% WARN: It's not really possible to add an image before the title, without a real title page
+{ % WARN: The centering command needs its own scope
+  \centering
+  \includegraphics[width=7cm, height=1.5cm]{Logo_INSA.png}\\
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% francisation des noms de tableaux, figures, etc.
+\renewcommand{\contentsname}{Table des Matières}
+\def\lstlistingautorefname{Cd.}
+\renewcommand{\lstlistingname}{Code}
+\renewcommand{\lstlistlistingname}{Codes et programmes}
+
+% -- Table of contents
+\tableofcontents
+% \listoffigures
+% \listoftables
+% \lstlistoflistings
+% \newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagenumbering{arabic} % reset page numbering of main matter sections
+
+\input{tex/content.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% glossary and acronyms
+% \printglossary[type=\acronymtype, title=Acronymes]
+% \printglossary[title=Glossaire]
+\printglossary[type=\acronymtype]
+
+\printglossary
+
+% biblio
+\printbibliography[
+    heading=bibintoc,
+    category=cited,
+    title={Références}
+]
+
+% uncited references (bibliography)
+% https://tex.stackexchange.com/questions/6967/how-to-split-bibliography-into-works-cited-and-works-not-cited
+\printbibliography[
+    notcategory=cited,
+    heading=bibintoc,
+    title={Bibliographie additionnelle},
+]
+
+\end{document}

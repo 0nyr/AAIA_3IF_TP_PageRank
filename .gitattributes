@@ -1,0 +1,11 @@
+# linguist settings tuto : https://medium.com/@bolajiayodeji/introducing-github-linguist-8f09273ddea1
+# linguist doc : https://linguist.readthedocs.io/en/latest/
+# linguist repo : https://github.com/github/linguist
+
+projects/**/*.html linguist-detectable=false
+projects/**/*.pdf linguist-detectable=false
+projects/* linguist-documentation=false
+
+# specify languages from file extension
+*.bib linguist-language=bibtex
+*.tex linguist-language=tex

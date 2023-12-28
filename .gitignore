@@ -1,0 +1,4 @@
+# C compiler outputs
+obj/
+bin/
+*.o

@@ -1,0 +1,25 @@
+# LaTeX build file
+*.bbl 
+*.aux 
+*.blg 
+*.bcf 
+*.blg 
+*.log 
+*.xml
+*.fls
+*.gz
+*.fdb_latexmk
+*.out
+*.toc
+*.glo
+*.ist
+*.acn
+*.acr
+*.alg
+*.dvi
+*.glg
+*.gls
+*.ilg
+*.lot
+*.lof
+*.lol

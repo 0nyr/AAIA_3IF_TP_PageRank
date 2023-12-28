@@ -1,0 +1,145 @@
+% !TeX spellcheck = fr
+% !TeX encoding = UTF-8
+
+% -- Introduction
+
+% -- Exercice 1
+\section{Exercice 1 : Marche aléatoire et Matrice de Transition dans PageRank}
+
+\textit{Montrez que pour tout $k \geq 1$ et tout couple de sommets $(i, j) \in S \times S, M^k[i][j]$ est égal à la probabilité d'arriver sur la page j en k clics à partir de la page i.}
+
+Pour comprendre comment la matrice de transition $M$ se rapporte à la probabilité d'arriver sur une page donnée en $k$ clics, considérons d'abord ce que signifie une marche aléatoire sur le graphe du web $G = (S, A)$.
+
+\subsection{Rappels et explications}
+Les propriétés étudiées dans le cours\footnote{Voir le cours d'\acrshort{aaia}, section 3.1 p11. \url{http://perso.citi-lab.fr/csolnon/supportAlgoGraphes.pdf}} sur la théorie des graphes aborde les notions de marche aléatoire et de matrice de transition \cite{Solnon2016coursAAIA}. Ces notions sont essentielles pour comprendre l'algorithme PageRank.
+
+\subsubsection{Marche aléatoire sur le graphe}
+
+Dans le contexte de l'algorithme PageRank, la marche aléatoire représente un utilisateur naviguant sur le Web en cliquant sur des liens de manière aléatoire. À chaque étape:
+\begin{itemize}
+    \item L'utilisateur est sur une page $i$ (un sommet dans le graphe).
+    \item Il clique sur un lien sortant au hasard, le menant à une page $j$ (un autre sommet).
+\end{itemize}
+
+\subsubsection{Matrice de transition $M$}
+
+La matrice de transition $M$ reflète la probabilité de passer d'une page à une autre en un seul clic. Ainsi, $M[i][j]$ représente la probabilité de passer de la page $i$ à la page $j$. Elle est définie comme :
+
+\begin{itemize}
+    \item $M[i][j] = \frac{1}{d^+(i)}$ si un lien (arc) existe de $i$ à $j$ (c'est-à-dire $i \rightarrow j$).
+    \item $M[i][j] = 0$ sinon.
+\end{itemize}
+
+Où $d^+(i)$ est le nombre de liens sortants de la page $i$ (son demi-degré extérieur).
+
+\subsubsection{Puissances de la matrice de transition $M^k$}
+
+Lorsque l'on considère $M^k$, avec $k > 1$, on regarde le processus de navigation après $k$ clics. Voici comment cela fonctionne :
+
+\begin{itemize}
+    \item $M^1 = M$ représente la probabilité de passer d'une page à une autre en un seul clic.
+    \item $M^2 = M \times M$ représente la probabilité de passer d'une page à une autre en deux clics.
+    \item Et ainsi de suite, jusqu'à $M^k$, qui représente la probabilité de passer d'une page à une autre en $k$ clics.
+\end{itemize}
+
+Pour montrer que $M^k[i][j]$ est égal à la probabilité d'arriver sur la page $j$ en $k$ clics à partir de la page $i$, on utilise la propriété des marches aléatoires et des matrices de transition. La démonstration informelle peut être faite par induction sur $k$ :
+
+\begin{itemize}
+    \item \textbf{Initialisation (k=1)} : Par définition, $M[i][j]$ est la probabilité d'aller de $i$ à $j$ en un clic.
+    \item \textbf{Récurrence} : Supposons que $M^{k-1}[i][j]$ représente la probabilité d'aller de $i$ à $j$ en $k-1$ clics. $M^k$ est alors le produit de $M$ et $M^{k-1}$, ce qui signifie que chaque élément $M^k[i][j]$ est la somme des probabilités de passer de $i$ à un certain intermédiaire $m$ en un clic (selon $M[i][m]$) et puis d'aller de $m$ à $j$ en $k-1$ clics (selon $M^{k-1}[m][j]$). Cela reflète la nature cumulative des probabilités dans les marches aléatoires.
+\end{itemize}
+
+\subsection{Démonstration formelle par récurrence}
+
+Nous cherchons à démontrer que pour une matrice de transition $M$ d'une marche aléatoire sur le graphe du web, $M^k[i][j]$ représente la probabilité d'arriver sur la page $j$ en $k$ clics à partir de la page $i$.
+
+\paragraph*{Rappel}
+En Mathématique, démonter qu'une proposition $P(n)$ est vraie pour tout $n \in \mathbb{N}$ signifie démontrer que $P(1)$ est vrai quelle que soit la valeur de $n$. Dans ce cas, une preuve par récurrence sur $k$ est appropriée.
+
+\subsubsection{Notations et Déclaration des Variables}
+
+\begin{itemize}
+    \item $M \in \mathbb{R}^{|S| \times |S|}$ : Matrice de transition, où chaque élément $M[i][j]$ représente la probabilité de passer de la page $i$ à la page $j$.
+    \item $i, j \in \{1, 2, \ldots, |S|\}$ : Indices représentant des pages spécifiques dans le graphe, où $|S|$ est le nombre total de pages ou sommets dans le graphe.
+    \item $k \in \mathbb{N}$ : Le nombre de clics (ou étapes) dans la marche.
+    \item $m \in \{1, 2, \ldots, |S|\}$ : Un sommet intermédiaire dans le graphe lors de la marche.
+    \item $S$ : L'ensemble des pages Web ou sommets du graphe. $S \in \mathbb{N}$ et représente le nombre total de sommets.
+    \item $d^+(i) \in \mathbb{N}$ : Le demi-degré extérieur du sommet $i$, c'est-à-dire le nombre de liens sortants de $i$ dans un graphe orienté.
+    \item $P(n)$ : La proposition que nous cherchons à démontrer. Spécifiquement, $P(n)$ stipule que pour tout $n \in \mathbb{N}$ et pour tout couple de sommets $(i, j) \in S \times S$, $M^n[i][j]$ donne la probabilité d'une marche de longueur $n$ de $i$ à $j$.
+\end{itemize}
+
+\subsubsection{Preuve par Induction sur $k$}
+
+\paragraph{Proposition $P(n)$ :} Pour tout $n \geq 1$ et tout couple de sommets $(i, j) \in S \times S$, $M^n[i][j]$ est égal à la probabilité d'arriver sur la page $j$ en $n$ clics à partir de la page $i$.
+
+$$ P(n) : \forall n \in \mathbb{N^*}, \forall i, j \in \{1, 2, \ldots, |S|\}, M^n[i][j] = \text{"probabilité d'une marche de } i \text{ à } j \text{ de longueur } n \text{"}.$$
+
+
+\subsubsection{Initialisation : $P(1)$}
+Par définition :
+
+\begin{itemize}
+    \item Cas 1 : $M[i][j] = \frac{1}{d^+(i)}$ si $(i, j) \in A$.
+    \item Cas 2 : $M[i][j] = 0$ si $(i, j) \notin A$.
+\end{itemize}
+
+Dans les deux cas, $M^1[i][j]$ correspond aux probabilités définies pour un clic unique, donc $P(1)$ est vrai.
+
+\subsubsection{Récurrence : $P(k) \rightarrow P(k+1)$}
+Supposons que $P(k)$ soit vrai, c'est-à-dire que $M^k[i][j]$ représente la probabilité d'aller de $i$ à $j$ en $k$ clics.
+
+Pour tout chemin de longueur $k+1$ de $i$ à $j$, il doit passer par un intermédiaire $m$. Ainsi, la probabilité d'une marche de $i$ à $j$ en $k+1$ clics est la somme sur tous les sommets intermédiaires possibles $m$ des produits des probabilités d'aller de $i$ à $m$ en $k$ clics et de $m$ à $j$ en un clic.
+
+\[
+M^{k+1}[i][j] = \sum_{m=1}^{|S|}M^k[i][m] \cdot M[m][j]
+\]
+
+Cela correspond à la définition du produit de matrices (dot-product). Par hypothèse de récurrence, $M^k[i][m]$ est la probabilité d'une marche de longueur $k$ de $i$ à $m$, et $M[m][j]$ est la probabilité d'un clic de $m$ à $j$. Ainsi, l'induction est complète et $P(n)$ est démontrée\footnote{Adapté d'une preuve consultable sur \textit{math.stackexchange.com} \cite{ramirezamaya2017proof}}.
+
+\textbf{En Conclusion}
+
+Pour démontrer formellement que $M^k[i][j]$ est la probabilité d'arriver sur la page $j$ en $k$ clics à partir de la page $i$, vous devrez utiliser des arguments de probabilité et la définition des marches aléatoires, en plus d'une preuve par récurrence sur la puissance de la matrice. C'est un concept fondamental en théorie des graphes et dans l'analyse des algorithmes de marche aléatoire, comme celui de PageRank.
+
+\section{Exercice 2 : PageRank sur liste d'adjacence}
+Dans cet exercice, nous allons implémenter l'algorithme PageRank sur un graphe représenté par une liste d'adjacence. L'implémentation C de cette liste d'adjascence est fournie.
+
+L'étape la plus cruciale de l'algorithme PageRank est bien sûr le calcul d'une rangée de score (ou vecteur de probabilités de transition à l'étape $k$). Ce calcul se base sur la cardinalité des liens sortants du sommet considéré, ainsi que sur la valeur du score de ce sommet à l'étape $k-1$.
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \tikzstyle{every node}=[font=\LARGE]
+        \draw  (4,23.5) circle (1cm) node {\LARGE 1} ;
+        \draw  (8.5,20.25) circle (1cm) node {\LARGE 2} ;
+        \draw  (3.5,18.75) circle (1cm) node {\LARGE 0} ;
+        \draw  (12.75,21.5) circle (1cm) node {\LARGE 4} ;
+        \draw  (17.5,22.75) circle (1cm) node {\LARGE 3} ;
+        \draw  (16.75,18.5) circle (1cm) node {\LARGE 5} ;
+        \draw [<->, >=Stealth] (4.5,18.75) .. controls (6,19.5) and (6,19.5) .. (7.5,20);
+        \draw [<->, >=Stealth] (13.75,21.75) .. controls (15.25,22.5) and (15.25,22.5) .. (16.5,23);
+        \draw [<->, >=Stealth] (17,19.5) .. controls (17.25,20.75) and (17.25,20.75) .. (17.25,21.75);
+        \draw [->, >=Stealth] (7.5,20.25) .. controls (6.25,21.75) and (6.25,21.75) .. (5,23.25);
+        \draw [->, >=Stealth] (3.5,19.75) .. controls (3.75,21.25) and (3.75,21.25) .. (3.75,22.5);
+        \draw [->, >=Stealth] (9.5,20.5) .. controls (10.75,21) and (10.75,21) .. (11.75,21.25);
+        \draw [->, >=Stealth] (12.75,20.5) .. controls (14.25,19.5) and (14.25,19.5) .. (15.75,18.5);
+        \draw [->, >=Stealth] (5,23.5) .. controls (8.5,22.75) and (8.5,22.75) .. (11.75,21.75);
+        \node [font=\LARGE] at (11.25,24) {Graph $G_1$:};
+    \end{tikzpicture}
+    \caption{Représentation du graphe $G_1$ fourni dans le fichier \texttt{res/example\_1.txt}}.
+    \label{fig:graph_g1}
+\end{figure}
+
+L'implémentation de cet algorithme donne ainsi le résultat suivant pour le graphe $G_1$ fourni :
+
+\begin{minipage}{\dimexpr\linewidth-20pt}
+\begin{lstlisting}[language=bash, caption={Résultat de l'algorithme PageRank sur le graphe $G_1$ fourni, pour $k = 4$.}]
+    Scores at step 0: [0.166667, 0.166667, 0.166667, 0.166667, 0.166667, 0.166667]
+    Scores at step 1: [0.055556, 0.138889, 0.083333, 0.250000, 0.305556, 0.166667]
+    Scores at step 2: [0.027778, 0.055556, 0.027778, 0.319444, 0.291667, 0.277778]
+    Scores at step 3: [0.009259, 0.023148, 0.013889, 0.423611, 0.224537, 0.305556]
+    Scores at step 4: [0.004630, 0.009259, 0.004630, 0.417824, 0.239583, 0.324074]
+\end{lstlisting}
+\end{minipage}
+
+Le résultat est donc, pour $k = 4$ : $[0.004630, 0.009259, 0.004630, 0.417824, 0.239583, 0.324074]$. Le sommet 3 est donc le plus important, suivi des sommets 5 et 4 à l'issue de l'étape 4.
+
