@@ -96,12 +96,18 @@ void printScores(Scores** scores, int k, int n){
             printf("%f", (float)scores[i]->scores[j]);
             if (j<n-1) printf(", ");
         }
-        printf("]\n");
+
+        float sum = 0;
+        for (int j=0; j<n; j++){
+            sum += scores[i]->scores[j];
+        }
+        printf("] (sum: %f)\n", sum);
     }
 }
 
 int main(){
-    // Load a first example graph
+    // # Exercice 1: Load a first example graph
+    printf("\nExercice 1:\n");
     FILE* fp  = fopen("res/example_1.txt", "r");
     DiGraph* g = readDigraph(fp);
     fclose(fp);
@@ -111,6 +117,19 @@ int main(){
     // Compute the PageRank scores of the first example graph
     int k = 4;
     Scores** scores = pagerank(g, k);
+    printScores(scores, k, g->n);
+
+    // # Exercice 2: Load a second example graph
+    printf("\nExercice 2:\n");
+    fp  = fopen("res/example_2.txt", "r");
+    g = readDigraph(fp);
+    fclose(fp);
+
+    printDigraph(g);
+
+    // Compute the PageRank scores of the second example graph
+    k = 4;
+    scores = pagerank(g, k);
     printScores(scores, k, g->n);
 
     return 0;

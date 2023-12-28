@@ -101,7 +101,10 @@ Cela correspond à la définition du produit de matrices (dot-product). Par hypo
 Pour démontrer formellement que $M^k[i][j]$ est la probabilité d'arriver sur la page $j$ en $k$ clics à partir de la page $i$, vous devrez utiliser des arguments de probabilité et la définition des marches aléatoires, en plus d'une preuve par récurrence sur la puissance de la matrice. C'est un concept fondamental en théorie des graphes et dans l'analyse des algorithmes de marche aléatoire, comme celui de PageRank.
 
 \section{Exercice 2 : PageRank sur liste d'adjacence}
-Dans cet exercice, nous allons implémenter l'algorithme PageRank sur un graphe représenté par une liste d'adjacence. L'implémentation C de cette liste d'adjascence est fournie.
+
+\textit{Implémentez l'algorithme PageRank sur un graphe représenté par une liste d'adjacence. Donnez le résultat de l'algorithme sur le graphe $G_1$ fourni dans le fichier \texttt{res/example\_1.txt} pour $k = 4$.}
+
+Dans cet exercice, nous allons implémenter l'algorithme PageRank sur un graphe représenté par une liste d'adjacence. L'implémentation C de cette liste d'adjacence est fournie.
 
 L'étape la plus cruciale de l'algorithme PageRank est bien sûr le calcul d'une rangée de score (ou vecteur de probabilités de transition à l'étape $k$). Ce calcul se base sur la cardinalité des liens sortants du sommet considéré, ainsi que sur la valeur du score de ce sommet à l'étape $k-1$.
 
@@ -143,3 +146,45 @@ L'implémentation de cet algorithme donne ainsi le résultat suivant pour le gra
 
 Le résultat est donc, pour $k = 4$ : $[0.004630, 0.009259, 0.004630, 0.417824, 0.239583, 0.324074]$. Le sommet 3 est donc le plus important, suivi des sommets 5 et 4 à l'issue de l'étape 4.
 
+\section{Exercice 3 : Problème de PageRank sur matrice d'adjacence}
+
+\textit{Exécutez l'algorithme PageRank sur le graphe $G_2$ fourni dans le fichier \texttt{res/example\_2.txt} pour $k = 4$. Calculez la somme des valeurs du vecteur $s_k$ à chaque itération k. Qu'observe-t-on ? Comment évolue la somme des valeurs du vecteur $s_k$ lorsque $k$ augmente ?}
+
+Le graphe $G_2$ fourni dans le fichier \texttt{res/example\_2.txt} est représenté dans la figure \ref{fig:graph_g2}. Il s'agit du graphe $G_1$ dans lequel on a retiré le lien $1 \rightarrow 4$.
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \tikzstyle{every node}=[font=\LARGE]
+        \draw  (4,23.5) circle (1cm) node {\LARGE 1} ;
+        \draw  (8.5,20.25) circle (1cm) node {\LARGE 2} ;
+        \draw  (3.5,18.75) circle (1cm) node {\LARGE 0} ;
+        \draw  (12.75,21.5) circle (1cm) node {\LARGE 4} ;
+        \draw  (17.5,22.75) circle (1cm) node {\LARGE 3} ;
+        \draw  (16.75,18.5) circle (1cm) node {\LARGE 5} ;
+        \draw [<->, >=Stealth] (4.5,18.75) .. controls (6,19.5) and (6,19.5) .. (7.5,20);
+        \draw [<->, >=Stealth] (13.75,21.75) .. controls (15.25,22.5) and (15.25,22.5) .. (16.5,23);
+        \draw [<->, >=Stealth] (17,19.5) .. controls (17.25,20.75) and (17.25,20.75) .. (17.25,21.75);
+        \draw [->, >=Stealth] (7.5,20.25) .. controls (6.25,21.75) and (6.25,21.75) .. (5,23.25);
+        \draw [->, >=Stealth] (3.5,19.75) .. controls (3.75,21.25) and (3.75,21.25) .. (3.75,22.5);
+        \draw [->, >=Stealth] (9.5,20.5) .. controls (10.75,21) and (10.75,21) .. (11.75,21.25);
+        \draw [->, >=Stealth] (12.75,20.5) .. controls (14.25,19.5) and (14.25,19.5) .. (15.75,18.5);
+        \node [font=\LARGE] at (11.25,24) {Graph $G_2$:};
+    \end{tikzpicture}
+    \caption{Représentation du graphe $G_2$ fourni dans le fichier \texttt{res/example\_2.txt}}.
+    \label{fig:graph_g2}
+\end{figure}
+
+On relance l'algorithme PageRank sur le graphe $G_2$. On obtient le résultat suivant :
+
+\begin{minipage}{\dimexpr\linewidth-20pt}
+    \begin{lstlisting}[language=bash, caption={Résultat de l'algorithme PageRank sur le graphe $G_2$ fourni, pour $k = 4$, avec la somme des valeurs du vecteur $s_k$ à chaque itération $k$.}]
+    S0: [0.166667, 0.166667, 0.166667, 0.166667, 0.166667, 0.166667] (sum: 1.000000)
+    S1: [0.055556, 0.138889, 0.083333, 0.250000, 0.138889, 0.166667] (sum: 0.833333)
+    S2: [0.027778, 0.055556, 0.027778, 0.236111, 0.152778, 0.194444] (sum: 0.694444)
+    S3: [0.009259, 0.023148, 0.013889, 0.270833, 0.127315, 0.194444] (sum: 0.638889)
+    S4: [0.004630, 0.009259, 0.004630, 0.258102, 0.140046, 0.199074] (sum: 0.615741)
+    \end{lstlisting}
+\end{minipage}
+
+On remarque que la somme du vecteur $s_k$ diminue à chaque itération. Hors, ce vecteur est censé donné la probabilité de se trouver sur chaque sommet du graphe à l'étape $k$. La somme de ces probabilités devrait donc être égale à 1.
