@@ -188,3 +188,24 @@ On relance l'algorithme PageRank sur le graphe $G_2$. On obtient le résultat su
 \end{minipage}
 
 On remarque que la somme du vecteur $s_k$ diminue à chaque itération. Hors, ce vecteur est censé donné la probabilité de se trouver sur chaque sommet du graphe à l'étape $k$. La somme de ces probabilités devrait donc être égale à 1.
+
+\section{Exercice 4 : Correction de l'algorithme PageRank sur matrice d'adjacence}
+On définit un sommet comme étant \textit{absorbant} si il ne possède aucun lien sortant, c'est-à-dire si son demi-degré $d^+(i)$ extérieur est égal à 0. Dans le graphe $G_2$ fourni, le sommet 1 est absorbant.
+
+Dans ce cas, l'algorithme PageRank actuel ne fonctionne pas correctement. En effet, la somme des valeurs du vecteur $s_k$ à chaque itération $k$ n'est pas forcément égale à 1. Cela est dû au fait que la matrice de transition $M$ n'est pas stochastique, c'est-à-dire que la somme des valeurs de chaque ligne n'est pas égale à 1. Ainsi, lors du calcul des valeurs de $s_k$, la somme des valeurs du vecteur $s_{k-1}$ n'est pas forcément égale à 1 non-plus.
+
+Pour corriger ça, on va modifier la matrice de transition $M$ pour la rendre stochastique. Pour cela, on va ajouter une probabilité de transition de chaque sommet vers tous les autres sommets du graphe. Ainsi, la somme des valeurs de chaque ligne de la matrice sera égale à 1. Le fait d'ajouter ces connexions virtuelles vers tous les autres sommets conserve le fait que le sommet absorbant ne discrimine aucun autre sommet. En effet, dans le cas de PageRank, un sommet qui n'est connecté à aucun autre sommet ou qui est connecté à tous les autres sommets du graphe est équivalent puisqu'il ne discrimine aucun autre sommet par rapport à un autre dans la marche aléatoire.
+
+Après modification de l'algorithme, on obtient les résultats suivants :
+
+\begin{minipage}{\dimexpr\linewidth-20pt}
+    \begin{lstlisting}[language=bash, caption={Résultat de l'algorithme PageRank sur le graphe $G_2$ fourni, pour $k = 4$, avec la somme des valeurs du vecteur $s_k$ à chaque itération $k$.}]
+    S0: [0.166667, 0.166667, 0.166667, 0.166667, 0.166667, 0.166667] (sum: 1.000000)
+    S1: [0.083333, 0.166667, 0.111111, 0.277778, 0.166667, 0.194444] (sum: 1.000000)
+    S2: [0.064815, 0.106481, 0.069444, 0.305556, 0.203704, 0.250000] (sum: 1.000000)
+    S3: [0.040895, 0.073302, 0.050154, 0.369599, 0.193673, 0.272377] (sum: 1.000000)
+    S4: [0.028935, 0.049383, 0.032665, 0.381430, 0.213735, 0.293853] (sum: 1.000000)
+    \end{lstlisting}
+\end{minipage}
+
+Pour $s_4$, on obtient ainsi : $[0.028935, 0.049383, 0.032665, 0.381430, 0.213735, 0.293853]$. On obtient donc bien une somme de 1 à chaque itération $k$. On remarque également que les valeurs de $s_k$ sont différentes de celles obtenues précédemment. En effet, le sommet 1 est maintenant connecté à tous les autres sommets du graphe, ce qui fait qu'il est moins discriminant que les autres sommets. Ainsi, les valeurs de $s_k$ sont plus équilibrées entre les différents sommets du graphe.

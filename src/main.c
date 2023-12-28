@@ -84,6 +84,53 @@ Scores** pagerank(DiGraph* g, int k){
     return scores;
 }
 
+Scores** pagerankCorrected(DiGraph* g, int k){
+    // return the scores of the PageRank algorithm up to step k
+    // Corrected to handle is_absorbing nodes
+    Scores** scores = (Scores**)malloc((k+1)*sizeof(Scores*));
+
+    // initial scores at step 0
+    scores[0] = (Scores*)malloc(sizeof(Scores));
+    scores[0]->k = 0;
+    scores[0]->scores = (float*)malloc(g->n*sizeof(float));
+    for (int j=0; j<g->n; j++){
+        // initial transition probabilities are uniform
+        scores[0]->scores[j] = 1.0/(float)g->n;
+    }
+
+    // determine which nodes are absorbing
+    int* is_absorbing = (int*)malloc(g->n*sizeof(int));
+    for (int j=0; j<g->n; j++){
+        if (g->nbSucc[j] == 0) is_absorbing[j] = 1;
+        else is_absorbing[j] = 0;
+    }
+        
+    // step k >= 1
+    for (int i=1; i<=k; i++){
+        // initialization of the scores at step k
+        scores[i] = (Scores*)malloc(sizeof(Scores));
+        scores[i]->k = i;
+        scores[i]->scores = (float*)malloc(g->n*sizeof(float));
+        
+        // absorbing nodes: compute minimal score
+        float minScore = 0;
+        for (int j=0; j<g->n; j++){
+            if (is_absorbing[j] == 1) minScore += scores[i-1]->scores[j]/(float)g->n;
+        }
+        
+        for (int j=0; j<g->n; j++)
+            scores[i]->scores[j] = minScore;
+        
+        // redistribution of the scores to all successors
+        for(int j=0; j<g->n; j++){
+            for (int l=0; l<g->nbSucc[j]; l++){
+                scores[i]->scores[g->succ[j][l]] += scores[i-1]->scores[j]/(float)g->nbSucc[j];
+            }
+        }
+    }
+    return scores;
+}
+
 /* Print score like so:
 Scores at step 0: [0.166667, 0.166667, 0.166667, 0.166667, 0.166667, 0.166667]
 Scores at step 1: [0.027778, 0.055556, 0.027778, 0.319444, 0.291667, 0.277778]
@@ -130,6 +177,11 @@ int main(){
     // Compute the PageRank scores of the second example graph
     k = 4;
     scores = pagerank(g, k);
+    printScores(scores, k, g->n);
+
+    // use corrected version to handle is_absorbing nodes
+    printf("\nExercice 2 with corrected algo:\n");
+    scores = pagerankCorrected(g, k);
     printScores(scores, k, g->n);
 
     return 0;
