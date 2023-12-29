@@ -1,0 +1,11 @@
+% !TeX spellcheck = fr
+% !TeX encoding = UTF-8
+
+% -- Introduction
+\section*{Introduction}
+
+L'algorithme PageRank, développé par Larry Page et Sergey Brin à la fin des années 1990, est au cœur du moteur de recherche original de Google. Il a révolutionné la manière dont les informations sont récupérées sur le vaste espace qu'est l'Internet. L'idée fondamentale derrière PageRank est simple et élégante : mesurer l'importance d'une page web en fonction du nombre et de la qualité des liens qui y pointent. En pratique, cela revient à considérer le web comme un graphe, où chaque page est un sommet et chaque lien est une arête dirigée. L'algorithme effectue ensuite une marche aléatoire sur ce graphe pour déterminer la probabilité qu'un "surfeur" aléatoire arrive à une page donnée, cette probabilité servant d'indicateur de l'importance ou du "rang" de la page.
+
+Toutefois, la mise en œuvre effective de PageRank dans un contexte réel est loin d'être triviale. Elle doit tenir compte de nombreux défis techniques et théoriques, notamment comment traiter les sommets absorbants ou comment garantir la convergence de l'algorithme vers une distribution stable. Ce document vise à explorer certains de ces défis, en particulier comment transformer une matrice de transition classique en une matrice stochastique ergodique, et démontre pourquoi et comment de telles transformations préservent l'essence de l'algorithme PageRank tout en garantissant ses propriétés mathématiques fondamentales.
+
+Nous encourageons vivement tous les étudiants et lecteurs à participer activement à l'amélioration de cette correction et du code associé. Si vous trouvez des erreurs, des ambiguïtés ou des omissions, ou si vous avez des suggestions pour améliorer le contenu, n'hésitez pas à soumettre une Pull-Request sur le GitHub de la correction à l'adresse suivante : \url{https://github.com/0nyr/AAIA_3IF_TP_PageRank}. Votre contribution est précieuse et aidera à rendre ces ressources plus précises et utiles pour tous.

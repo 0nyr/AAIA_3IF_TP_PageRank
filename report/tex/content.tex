@@ -1,8 +1,6 @@
 % !TeX spellcheck = fr
 % !TeX encoding = UTF-8
 
-% -- Introduction
-
 % -- Exercice 1
 \section{Exercice 1 : Marche aléatoire et Matrice de Transition dans PageRank}
 
@@ -15,7 +13,7 @@ Les propriétés étudiées dans le cours\footnote{Voir le cours d'\acrshort{aai
 
 \subsubsection{Marche aléatoire sur le graphe}
 
-Dans le contexte de l'algorithme PageRank, la marche aléatoire représente un utilisateur naviguant sur le Web en cliquant sur des liens de manière aléatoire. À chaque étape:
+Dans le contexte de l'algorithme PageRank, la marche aléatoire représente un utilisateur naviguant sur le Web en cliquant sur des liens de manière aléatoire. À chaque étape :
 \begin{itemize}
     \item L'utilisateur est sur une page $i$ (un sommet dans le graphe).
     \item Il clique sur un lien sortant au hasard, le menant à une page $j$ (un autre sommet).
@@ -147,7 +145,7 @@ L'implémentation de cet algorithme donne ainsi le résultat suivant pour le gra
 
 Le résultat est donc, pour $k = 4$ : $[0.004630, 0.009259, 0.004630, 0.417824, 0.239583, 0.324074]$. Le sommet 3 est donc le plus important, suivi des sommets 5 et 4 à l'issue de l'étape 4.
 
-\section{Exercice 3 : Problème des noeuds absorbants}
+\section{Exercice 3 : Problème des nœuds absorbants}
 
 \textit{Exécutez l'algorithme PageRank sur le graphe $G_2$ fourni dans le fichier \texttt{res/example\_2.txt} pour $k = 4$. Calculez la somme des valeurs du vecteur $s_k$ à chaque itération k. Qu'observe-t-on ? Comment évolue la somme des valeurs du vecteur $s_k$ lorsque $k$ augmente ?}
 
@@ -190,8 +188,8 @@ On relance l'algorithme PageRank sur le graphe $G_2$. On obtient le résultat su
 
 On remarque que la somme du vecteur $s_k$ diminue à chaque itération. Hors, ce vecteur est censé donné la probabilité de se trouver sur chaque sommet du graphe à l'étape $k$. La somme de ces probabilités devrait donc être égale à 1.
 
-\section{Exercice 4 : Modification de PageRank pour les noeuds absorbants}
-On définit un sommet comme étant \textit{absorbant} si il ne possède aucun lien sortant, c'est-à-dire si son demi-degré $d^+(i)$ extérieur est égal à 0. Dans le graphe $G_2$ fourni, le sommet 1 est absorbant.
+\section{Exercice 4 : Modification de PageRank pour les nœuds absorbants}
+On définit un sommet comme étant \textit{absorbant} s'il ne possède aucun lien sortant, c'est-à-dire si son demi-degré $d^+(i)$ extérieur est égal à 0. Dans le graphe $G_2$ fourni, le sommet 1 est absorbant.
 
 Dans ce cas, l'algorithme PageRank actuel ne fonctionne pas correctement. En effet, la somme des valeurs du vecteur $s_k$ à chaque itération $k$ n'est pas forcément égale à 1. Cela est dû au fait que la matrice de transition $M$ n'est pas stochastique, c'est-à-dire que la somme des valeurs de chaque ligne n'est pas égale à 1. Ainsi, lors du calcul des valeurs de $s_k$, la somme des valeurs du vecteur $s_{k-1}$ n'est pas forcément égale à 1 non-plus.
 
@@ -256,7 +254,7 @@ Nous avions déjà défini une partie des notations dans une section précédent
 
 \subsubsection{Définitions}
 
-Soit $M$ la matrice de transition d'un graphe $G$. Nous transformons $M$ en une matrice stochastique $M'$ où les sommets absorbants redistribuent la même importance à chaque sommet du graphe. Cette transformation est réalisée en s'assurant que chaque sommet a au moins un lien sortant. La quantité redistribuée par les sommets absorbants à chaque itération est calculée par la formule suivante:
+Soit $M$ la matrice de transition d'un graphe $G$. Nous transformons $M$ en une matrice stochastique $M'$ où les sommets absorbants redistribuent la même importance à chaque sommet du graphe. Cette transformation est réalisée en s'assurant que chaque sommet a au moins un lien sortant. La quantité redistribuée par les sommets absorbants à chaque itération est calculée par la formule suivante :
 
 \[
 q_{abs} = \frac{1}{n} \cdot \sum_{\{i \in S | d^+(i) = 0\}} \vec{s_k}[i]
@@ -274,20 +272,20 @@ M''[i][j] =
 
 \subsubsection{Démonstration}
 
-\paragraph{Stochasticité de $M''$:} Nous devons montrer que $M''$ est une matrice stochastique, c'est-à-dire que chaque ligne de $M''$ somme à 1. Pour chaque sommet $i \in S$, la somme des probabilités de transition vers tous les autres sommets $j$ est:
+\paragraph{Stochasticité de $M''$ :} Nous devons montrer que $M''$ est une matrice stochastique, c'est-à-dire que chaque ligne de $M''$ somme à 1. Pour chaque sommet $i \in S$, la somme des probabilités de transition vers tous les autres sommets $j$ est :
 
 \[
 \sum_{j=1}^{|S|} M''[i][j] = \alpha \sum_{j=1}^{|S|} M'[i][j] + (1-\alpha) = \alpha + (1-\alpha) = 1
 \]
 
-Cela est vrai car $M'$ est déjà stochastique, et donc la somme des probabilités sur toutes les destinations $j$ pour un sommet donné $i$ est 1. L'ajout du terme $(1-\alpha)$ réparti uniformément entre tous les sommets assure que chaque ligne de $M''$ somme également à 1.
+Cela est vrai, car $M'$ est déjà stochastique, et donc la somme des probabilités sur toutes les destinations $j$ pour un sommet donné $i$ est 1. L'ajout du terme $(1-\alpha)$ réparti uniformément entre tous les sommets assure que chaque ligne de $M''$ somme également à 1.
 
-\paragraph{Ergodicité de $M''$:} Pour démontrer que $M''$ est ergodique, nous devons montrer que le graphe est irréductible et apériodique.
+\paragraph{Ergodicité de $M''$ :} Pour démontrer que $M''$ est ergodique, nous devons montrer que le graphe est irréductible et apériodique.
 
 \begin{itemize}
-    \item \textit{Irréductibilité}: Par la définition de $M''$, même si un sommet était initialement absorbant (aucun lien sortant), il a maintenant une probabilité $(1-\alpha)/n$ de se connecter à chaque autre sommet, garantissant qu'il y a toujours un chemin de n'importe quel sommet $i$ à n'importe quel sommet $j$. Ainsi, le graphe associé à $M''$ est irréductible.
+    \item \textit{Irréductibilité} : Par la définition de $M''$, même si un sommet était initialement absorbant (aucun lien sortant), il a maintenant une probabilité $(1-\alpha)/n$ de se connecter à chaque autre sommet, garantissant qu'il y a toujours un chemin de n'importe quel sommet $i$ à n'importe quel sommet $j$. Ainsi, le graphe associé à $M''$ est irréductible.
     
-    \item \textit{Apériodicité}: Supposons par l'absurde qu'il existe un entier $k > 1$ qui soit le plus grand commun diviseur des longueurs de tous les cycles dans le graphe. Cela signifierait que chaque cycle dans le graphe a une longueur qui est un multiple de $k$. Considérons un cycle de longueur $k$ et un sommet $i$ dans ce cycle. Dans $M''$, chaque sommet, y compris $i$, a une probabilité non nulle de transitionner vers lui-même en une étape, grâce à la téléportation du surfeur aléatoire ($\frac{1-\alpha}{n}$). Cela introduit un cycle de longueur 1 (boucle i vers i) pour chaque sommet, en contradiction avec notre supposition initiale que tous les cycles ont une longueur qui est un multiple de $k > 1$. Par conséquent, notre supposition doit être fausse, et le plus grand commun diviseur des longueurs des cycles doit être 1. Ainsi, le graphe associé à $M''$ est apériodique.
+    \item \textit{Apériodicité} : Supposons par l'absurde qu'il existe un entier $k > 1$ qui soit le plus grand commun diviseur des longueurs de tous les cycles dans le graphe. Cela signifierait que chaque cycle dans le graphe a une longueur qui est un multiple de $k$. Considérons un cycle de longueur $k$ et un sommet $i$ dans ce cycle. Dans $M''$, chaque sommet, y compris $i$, a une probabilité non nulle de transitionner vers lui-même en une étape, grâce à la téléportation du surfeur aléatoire ($\frac{1-\alpha}{n}$). Cela introduit un cycle de longueur 1 (boucle i vers i) pour chaque sommet, en contradiction avec notre supposition initiale que tous les cycles ont une longueur qui est un multiple de $k > 1$. Par conséquent, notre supposition doit être fausse et le plus grand commun diviseur des longueurs des cycles doit être 1. Ainsi, le graphe associé à $M''$ est apériodique.
 
 \end{itemize}
 
@@ -297,7 +295,7 @@ En combinant ces deux propriétés, nous concluons que $M''$ est à la fois stoc
 
 Dans cet exercice, nous allons implémenter l'algorithme PageRank avec téléportation (surfeur aléatoire) sur un graphe représenté par une liste d'adjacence. Cela revient à faire les modifications de la matrice de transition $M$ pour la rendre ergodique et stochastique, comme nous l'avons vu dans l'exercice précédent.
 
-Pour cela, on remarque qu'à chaque itération $k$, la valeur minimale d'une élément de $s_k$ est $(\alpha \times q_{abs}) + \frac{1-\alpha}{n}$. Cela correspond à sortir le terme $q_{abs}$ dans le terme $M'[i][j]$. Il ne reste plus qu'à propager les valeurs des successeurs de chaque sommets pondéré par $\alpha$.
+Pour cela, on remarque qu'à chaque itération $k$, la valeur minimale d'un élément de $s_k$ est $(\alpha \times q_{abs}) + \frac{1-\alpha}{n}$. Cela correspond à sortir le terme $q_{abs}$ dans le terme $M'[i][j]$. Il ne reste plus qu'à propager les valeurs des successeurs de chaque sommet pondéré par $\alpha$.
 
 Après modification de l'algorithme, on obtient les résultats suivants :
 
@@ -314,5 +312,44 @@ Après modification de l'algorithme, on obtient les résultats suivants :
 On obtient pour $s_4$, $\alpha = 0.9$ : $[0.051382, 0.078035, 0.057379, 0.343617, 0.202517, 0.267070]$.
 
 \section{Exercice 7 : Calcul de rangs après convergence}
+
+\textit{Calculez les rangs des sommets du graphe $G_2$ fourni dans le fichier \texttt{res/example\_2.txt} après convergence de l'algorithme PageRank.}
+
+On modifie l'algorithme pour qu'il s'arrête lorsque la différence entre les valeurs de $s_k$ et $s_{k-1}$ est inférieure à $10^{-6}$. Plutôt que de vérifier que toutes les valeurs sont bien inférieures en valeur absolue à la valeur limite $\epsilon$, on vérifie si au moins une valeur est supérieure en valeur absolue à $\epsilon$. Cela permet d'éviter de parcourir toutes les valeurs du vecteur $s_k$ à chaque itération.
+
+Après modification de l'algorithme, on obtient les résultats suivants :
+
+\begin{minipage}{\dimexpr\linewidth-20pt}
+    \begin{lstlisting}[language=bash, caption={Résultat de l'algorithme PageRank après convergence sur le graphe $G_2$, avec $\alpha = 0.9$ et $\epsilon = 1.0 \times 10^{-10}$.}]
+        Convergence reached: stopping at step 43
+        Last scores provided at step 42
+        +------- Ranks [k=42] ---------------
+        + Rank 1: node 3 (score: 0.375081)
+        + Rank 2: node 5 (score: 0.286246)
+        + Rank 3: node 4 (score: 0.205998)
+        + Rank 4: node 1 (score: 0.053957)
+        + Rank 5: node 2 (score: 0.041506)
+        + Rank 6: node 0 (score: 0.037212)
+    \end{lstlisting}
+\end{minipage}
+
+\textit{Retester l'algorithme sur le gros graphe $G_\text{genetic}$. Donnez les 5 sommets les plus importants une fois la convergence atteinte.}
+
+On réeffectue le même test sur le graphe $G_\text{genetic}$ fourni dans le fichier \texttt{res/genetic\_network.txt}. On obtient les résultats suivants :
+
+\begin{minipage}{\dimexpr\linewidth-20pt}
+    \begin{lstlisting}[language=bash, caption={Résultat de l'algorithme PageRank après convergence sur le graphe $G_2$, avec $\alpha = 0.9$ et $\epsilon = 1.0 \times 10^{-10}$.}]
+        Convergence reached: stopping at step 161
+        Last scores provided at step 160
+        +------- Ranks [k=160] ---------------
+        + Rank 1: node 491 (score: 0.015354)
+        + Rank 2: node 492 (score: 0.015227)
+        + Rank 3: node 2790 (score: 0.014818)
+        + Rank 4: node 1182 (score: 0.014485)
+        + Rank 5: node 1188 (score: 0.014446)
+    \end{lstlisting}
+\end{minipage}
+
+Les 5 meilleurs sommets sont donc les sommets 491, 492, 2790, 1182 et 1188, une fois la convergence atteinte après 160 itérations.
 
 
