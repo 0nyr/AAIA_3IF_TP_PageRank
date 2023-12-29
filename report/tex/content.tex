@@ -293,3 +293,26 @@ Cela est vrai car $M'$ est déjà stochastique, et donc la somme des probabilit�
 
 En combinant ces deux propriétés, nous concluons que $M''$ est à la fois stochastique et ergodique. Cela garantit la convergence de l'algorithme PageRank vers une distribution stationnaire unique, indépendamment de l'état initial.
 
+\section{Exercice 6 : PageRank avec téléportation (surfeur aléatoire)}
+
+Dans cet exercice, nous allons implémenter l'algorithme PageRank avec téléportation (surfeur aléatoire) sur un graphe représenté par une liste d'adjacence. Cela revient à faire les modifications de la matrice de transition $M$ pour la rendre ergodique et stochastique, comme nous l'avons vu dans l'exercice précédent.
+
+Pour cela, on remarque qu'à chaque itération $k$, la valeur minimale d'une élément de $s_k$ est $(\alpha \times q_{abs}) + \frac{1-\alpha}{n}$. Cela correspond à sortir le terme $q_{abs}$ dans le terme $M'[i][j]$. Il ne reste plus qu'à propager les valeurs des successeurs de chaque sommets pondéré par $\alpha$.
+
+Après modification de l'algorithme, on obtient les résultats suivants :
+
+\begin{minipage}{\dimexpr\linewidth-20pt}
+    \begin{lstlisting}[language=bash, caption={Résultat de l'algorithme PageRank sur le graphe $G_2$ fourni, pour $k = 4$, avec la somme des valeurs du vecteur $s_k$ à chaque itération $k$, pour PageRank modifié avec téléportation et $\alpha = 0.9$.}]
+    S0: [0.166667, 0.166667, 0.166667, 0.166667, 0.166667, 0.166667] (sum: 1.000000)
+    S1: [0.091667, 0.166667, 0.116667, 0.266667, 0.166667, 0.191667] (sum: 1.000000)
+    S2: [0.076667, 0.117917, 0.082917, 0.289167, 0.196667, 0.236667] (sum: 1.000000)
+    S3: [0.059229, 0.093729, 0.068854, 0.335854, 0.189354, 0.252979] (sum: 1.000000)
+    S4: [0.051382, 0.078035, 0.057379, 0.343617, 0.202517, 0.267070] (sum: 1.000000)
+    \end{lstlisting}
+\end{minipage}
+
+On obtient pour $s_4$, $\alpha = 0.9$ : $[0.051382, 0.078035, 0.057379, 0.343617, 0.202517, 0.267070]$.
+
+\section{Exercice 7 : Calcul de rangs après convergence}
+
+
