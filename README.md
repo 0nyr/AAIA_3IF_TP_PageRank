@@ -1,10 +1,10 @@
 # AAIA - TP PageRank
 
+![PageRank border](img/presentation_image_cropped_with_text.jpg)
+
 > This project is configured for Linux, NixOS
 
-*A la ﬁn des années 90, Brin et Page ont conçu l’algorithme PageRank utilisé par le moteur de
-recherche Google pour trier les réponses d’une requête par ordre d’importance décroissante. Le
-but du TP est de découvrir et implémenter cet algorithme.*
+A la ﬁn des années 90, Brin et Page ont conçu l’algorithme PageRank utilisé par le moteur de recherche Google pour trier les réponses d’une requête par ordre d’importance décroissante. Le but du TP est de découvrir et implémenter cet algorithme.
 
 ## commands
 
