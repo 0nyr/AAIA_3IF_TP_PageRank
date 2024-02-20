@@ -300,6 +300,37 @@ Scores* pagerankErgodicWithStopThreshold(
     return lastScores;
 }
 
+/**
+ * Bubble sort.
+ * 
+ * This function sorts in place an array of node indices,
+ * based on an array of node scores.
+*/
+void sortScores(int* indices, double* scores, int n) {
+    // sort indices using bubble sort
+    // not the most efficient, but it's ok for small arrays
+    for (int i=0; i<n; i++) {
+        for (int j=0; j<n-i-1; j++) {
+            if (scores[j] < scores[j+1]) {
+                // swap scores
+                double tmpScore = scores[j];
+                scores[j] = scores[j+1];
+                scores[j+1] = tmpScore;
+
+                // swap indices
+                int tmpIndex = indices[j];
+                indices[j] = indices[j+1];
+                indices[j+1] = tmpIndex;
+            }
+        }
+    }
+}
+
+/**
+ * Print the ranks of the nodes in the graph.
+ * 
+ * Ranks are computed from the final scores (last step).
+*/
 void printRanks(DiGraph* g, Scores* lastScores) {
     // Print the ranks of the nodes in the graph
     // Ranks are computed from the final scores (last step)
@@ -312,23 +343,7 @@ void printRanks(DiGraph* g, Scores* lastScores) {
         sortedIndices[i] = i;
     }
 
-    // sort indices using bubble sort
-    // not the most efficient, but it's ok for small arrays
-    for (int i=0; i<g->n; i++) {
-        for (int j=0; j<g->n-i-1; j++) {
-            if (lastScores->scores[j] < lastScores->scores[j+1]) {
-                // swap scores
-                double tmpScore = lastScores->scores[j];
-                lastScores->scores[j] = lastScores->scores[j+1];
-                lastScores->scores[j+1] = tmpScore;
-
-                // swap indices
-                int tmpIndex = sortedIndices[j];
-                sortedIndices[j] = sortedIndices[j+1];
-                sortedIndices[j+1] = tmpIndex;
-            }
-        }
-    }
+    sortScores(sortedIndices, lastScores->scores, g->n);
 
     // print ranks
     printf("┌────── Ranks [k=%d] ──────────────────────\n", lastScores->k);
@@ -382,17 +397,17 @@ int main() {
     printRanks(g, lastScores);
 
     // # Exercice 7 bis: Load a third example graph
-    printf("\nExercice 7 bis, on big GENETIC graph:\n");
-    fp  = fopen("res/genetic.txt", "r");
-    g = readDigraph(fp);
-    fclose(fp);
+    // printf("\nExercice 7 bis, on big GENETIC graph:\n");
+    // fp  = fopen("res/genetic.txt", "r");
+    // g = readDigraph(fp);
+    // fclose(fp);
 
-    printDigraph(g);
+    // printDigraph(g);
 
-    // Compute the PageRank scores of the second example graph
-    lastScores = pagerankErgodicWithStopThreshold(g, alpha, threshold);
-    printScores(lastScores, g->n);
-    printRanks(g, lastScores);
+    // // Compute the PageRank scores of the second example graph
+    // lastScores = pagerankErgodicWithStopThreshold(g, alpha, threshold);
+    // printScores(lastScores, g->n);
+    // printRanks(g, lastScores);
 
     return 0;
 }

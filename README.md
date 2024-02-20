@@ -19,3 +19,7 @@ A la ﬁn des années 90, Brin et Page ont conçu l’algorithme PageRank utilis
 `make build`: Build by compiling project.
 
 `make run`: Run compiled executable.
+
+#### Manual run
+
+`./bin/main`: direct run of the compiled executable.
